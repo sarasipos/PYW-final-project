@@ -26,12 +26,14 @@ class Source:
     doi: str
     volume_number: int
     issue_number: int
-    date_viewed: str
+    date_viewed1: str
+    date_viewed2: str
+    date_viewed3: str
 
 
 """Give date in yyyy-mm-dd format for the publication!"""
 """Put titles between quotation marks!"""
-"""Give date in dd month abbreviated. yyyy format for date last viewed"""
+"""Give date_viewed_month in abbreviated form if it's longer than 4 letters"""
 # for the date last viewed, this could be changed that the input is in three
 # separate parts (year, month spelled out, and day) and then write a code that
 # does the abbreviation if it's longer than four letters
@@ -93,7 +95,8 @@ if __name__ == "__main__":
         print(chicago_author_date_source(source))
 
 
-# 
+# last_name, first_name. \"title.\" *journal*, vol. volume_number, no.
+# issue_number, date, pp. page_range, <doi>. Accessed date_viewed.
 
 
 def mla9_source(data: Source):
@@ -101,8 +104,9 @@ def mla9_source(data: Source):
     return (f"{data.last_name}, {data.first_name}. \"{data.title}.\" " +
             f"*{data.journal}*, vol. {data.volume_number}, " +
             f"no. {data.issue_number}, {data.date:.4s}, " +
-            f"pp. {data.page_range}, <{data.doi}>. "
-            f"Accessed {data.date_viewed}.")
+            f"pp. {data.page_range}, <{data.doi}>. " +
+            f"Accessed {data.date_viewed1} {data.date_viewed2} " +
+            f"{data.date_viewed3}.")
 
 
 if __name__ == "__main__":
