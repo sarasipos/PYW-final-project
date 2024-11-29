@@ -9,6 +9,7 @@ Created on Wed Nov 27 15:08:38 2024
 from dataclasses import dataclass
 import yaml
 from typing import List
+from datetime import datetime
 
 
 @dataclass
@@ -26,9 +27,7 @@ class Source:
     doi: str
     volume_number: int
     issue_number: int
-    date_viewed1: str
-    date_viewed2: str
-    date_viewed3: str
+    date_viewed: str
 
 
 """Give date in yyyy-mm-dd format for the publication!"""
@@ -48,13 +47,18 @@ class Sources:
 def load_source(filepath: str) -> Sources:
     with open(filepath, "r") as file:
         data = yaml.safe_load(file)
-
+        date_str = file.read().strip()
+    date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+    formatted_date = date_obj.strftime("%d. %B %Y")
     sources = [Source(**source) for source in data["source"]]
 # **source unpacks each dictionary from data["source"] into keyword arguments
 # so that the keys in each dictionary match the parameters of Source, a list is
 # built by iterating over each source in data["source"] and a list of Source
 # objects is the result
     return Sources(source=sources)
+
+
+# datetime.strftime("%d. %B %Y")  # almost correct format for date_viewed
 
 
 # last_name, first_name. (date). title. *journal*, *volume_number*(issue_number
@@ -105,8 +109,7 @@ def mla9_source(data: Source):
             f"*{data.journal}*, vol. {data.volume_number}, " +
             f"no. {data.issue_number}, {data.date:.4s}, " +
             f"pp. {data.page_range}, <{data.doi}>. " +
-            f"Accessed {data.date_viewed1} {data.date_viewed2} " +
-            f"{data.date_viewed3}.")
+            f"Accessed {data.formated_date}.")
 
 
 if __name__ == "__main__":
