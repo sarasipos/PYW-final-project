@@ -50,6 +50,7 @@ def load_source(filepath: str) -> Sources:
         date_str = file.read().strip()
     date_obj = datetime.strptime(date_str, "%Y-%m-%d")
     formatted_date = date_obj.strftime("%d. %B %Y")
+    data.append(formatted_date)
     sources = [Source(**source) for source in data["source"]]
 # **source unpacks each dictionary from data["source"] into keyword arguments
 # so that the keys in each dictionary match the parameters of Source, a list is
