@@ -8,11 +8,14 @@ Created on Wed Nov 27 15:08:38 2024
 
 from dataclasses import dataclass
 import yaml
-import markdown
 from typing import List
 
 
 @dataclass
+# dataclass examines the class to find fields, which are class
+# variables that have type annotations, here the first and last name, title,
+# etc. are the variables and the data types specified for each are the
+# annotations
 class Source:
     first_name: str
     last_name: str
@@ -34,16 +37,21 @@ class Source:
 # does the abbreviation if it's longer than four letters
 
 
-@dataclass  # ez mit jelent
+@dataclass
 class Sources:
     source: List[Source]
+# class used for internal typing representation of string forward references
 
 
 def load_source(filepath: str) -> Sources:
     with open(filepath, "r") as file:
         data = yaml.safe_load(file)
 
-    sources = [Source(**source) for source in data["source"]]  # ez mit jelent
+    sources = [Source(**source) for source in data["source"]]
+# **source unpacks each dictionary from data["source"] into keyword arguments
+# so that the keys in each dictionary match the parameters of Source, a list is
+# built by iterating over each source in data["source"] and a list of Source
+# objects is the result
     return Sources(source=sources)
 
 
@@ -61,7 +69,7 @@ def apa7_source(data: Source):
 
 
 if __name__ == "__main__":
-    sources = load_source("Tigno_2006.txt")
+    sources = load_source("data_of_sources.txt")
     for source in sources.source:
         print(apa7_source(source))
 
@@ -80,9 +88,12 @@ def chicago_author_date_source(data: Source):
 
 
 if __name__ == "__main__":
-    sources = load_source("Tigno_2006.txt")
+    sources = load_source("data_of_sources.txt")
     for source in sources.source:
         print(chicago_author_date_source(source))
+
+
+# 
 
 
 def mla9_source(data: Source):
@@ -95,6 +106,6 @@ def mla9_source(data: Source):
 
 
 if __name__ == "__main__":
-    sources = load_source("Tigno_2006.txt")
+    sources = load_source("data_of_sources.txt")
     for source in sources.source:
         print(mla9_source(source))
