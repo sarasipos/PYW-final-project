@@ -47,10 +47,6 @@ class Sources:
 def load_source(filepath: str) -> Sources:
     with open(filepath, "r") as file:
         data = yaml.safe_load(file)
-        date_str = file.read().strip()
-    date_obj = datetime.strptime(date_str, "%Y-%m-%d")
-    formatted_date = date_obj.strftime("%d. %B %Y")
-    data.append(formatted_date)
     sources = [Source(**source) for source in data["source"]]
 # **source unpacks each dictionary from data["source"] into keyword arguments
 # so that the keys in each dictionary match the parameters of Source, a list is
@@ -79,6 +75,13 @@ if __name__ == "__main__":
     sources = load_source("data_of_sources.txt")
     for source in sources.source:
         print(apa7_source(source))
+        with open("apa7_bib.md", "w") as fout:
+            fout.write(apa7_source(source))
+#    Func = open("apa7.html", "w")
+#    Func.write("<html>\n<head>\n<title> \nOutput Data in an HTML file \
+#               </title>\n/head> <body><h1>Bibliography<h1>\
+#                   \n<h2> {apa7_source(source)}<h2> \n<body></html>")
+#    Func.close()
 
 
 # last_name, first_name. date. \"title.\" *journal* volume_number(issue_number)
@@ -110,7 +113,7 @@ def mla9_source(data: Source):
             f"*{data.journal}*, vol. {data.volume_number}, " +
             f"no. {data.issue_number}, {data.date:.4s}, " +
             f"pp. {data.page_range}, <{data.doi}>. " +
-            f"Accessed {data.formated_date}.")
+            f"Accessed {data.date_viewed}.")
 
 
 if __name__ == "__main__":
