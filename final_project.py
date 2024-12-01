@@ -18,6 +18,8 @@ from datetime import datetime, date
 # etc. are the variables and the data types specified for each are the
 # annotations
 class Source:
+    # defining the class for the list of sources with the same keys as in the
+    # data_of_sources, keeping to the yaml format
     first_name: str
     last_name: str
     title: str
@@ -30,12 +32,10 @@ class Source:
     date_viewed: datetime
 
 
-"""Give date in yyyy-mm-dd format for the publication!"""
-"""Put titles between quotation marks!"""
-"""Give date_viewed_month in abbreviated form if it's longer than 4 letters"""
-# for the date last viewed, this could be changed that the input is in three
-# separate parts (year, month spelled out, and day) and then write a code that
-# does the abbreviation if it's longer than four letters
+"""Give dates in yyyy-mm-dd format"""
+"""Put titles that contain ':' between quotation marks!"""
+"""Middle namesshould be included in the first_name, as initials or fully"""
+"""If month and/or day is unkown for either dates put 01"""
 
 
 @dataclass
@@ -47,20 +47,15 @@ class Sources:
 def load_source(filepath: str) -> Sources:
     with open(filepath, "r") as file:
         data = yaml.safe_load(file)
-#    sources = Sources(source=[Source(**source) for source in data["source"]])
-#    sources = [Source(**source) for source in data["source"]]
-# **source unpacks each dictionary from data["source"] into keyword arguments
-# so that the keys in each dictionary match the parameters of Source, a list is
-# built by iterating over each source in data["source"] and a list of Source
-# objects is the result
-#    return Sources(source=sources)
+# loading the source file through the Sources class and defining 'data'
 
     def parse_date(date_value):
-        if isinstance(date_value, str):  # Parse string to datetime
+        # making sure that the date is in the correct format
+        if isinstance(date_value, str):
             return datetime.strptime(date_value, "%Y-%m-%d")
-        elif isinstance(date_value, datetime):  # Already a datetime
+        elif isinstance(date_value, datetime):
             return date_value
-        elif isinstance(date_value, date):  # Convert to datetime
+        elif isinstance(date_value, date):
             return datetime.combine(date_value, datetime.min.time())
         raise ValueError(f"Unexpected date format: {date_value}")
 
@@ -80,22 +75,31 @@ def load_source(filepath: str) -> Sources:
         for source in data["source"]
     ])
     return sources
+# unpacks each dictionary from data["source"] into keyword arguments
+# so that the keys in each dictionary match the parameters of Source, a list is
+# built by iterating over each source in data["source"] and a list of Source
+# objects is the result
 
 
-# datetime.strftime("%d. %B %Y")  # almost correct format for date_viewed
+# defining the different citation styles and both printing them and writing
+# them into markdown files, for a bibliography and for in-text citation as well
 
 
+# bibliography entry for apa 7
+# the order of the variables for apa7
 # last_name, first_name. (date). title. *journal*, *volume_number*(issue_number
 # ), page_range. <doi>
 
 
 def apa7_source(data: Source) -> str:
     date_str = data.date.strftime("%Y")
+    # only the year is needed for the publication date
     return (f"{data.last_name}, {data.first_name[0]}. ({date_str}). " +
             f"{data.title}. *{data.journal}*, " +
             f"*{data.volume_number}*({data.issue_number}), " +
             f"{data.page_range}. " +
             f"<{data.doi}>")
+    # the correct formatting of an apa 7th edition citation
 
 
 if __name__ == "__main__":
@@ -104,16 +108,31 @@ if __name__ == "__main__":
         print(apa7_source(source))
     with open("apa7_bib.md", "w") as fout:
         fout.write("Bibliography \n")
+    # writing the first line which is "Bibliography" and linebreak at the end
     for source in sources.source:
-        with open("apa7_bib.md", "a") as fout:
+        with open("apa7_bib.md", "a") as fout:  # a is for append
             fout.write(apa7_source(source) + "\n")
-#    Func = open("apa7.html", "w")
-#    Func.write("<html>\n<head>\n<title> \nOutput Data in an HTML file \
-#               </title>\n/head> <body><h1>Bibliography<h1>\
-#                   \n<h2> {apa7_source(source)}<h2> \n<body></html>")
-#    Func.close()
+    # writing each citation into a new line
 
 
+# in-text citation for apa 7
+
+
+def apa7_in_text(data: Source) -> str:
+    date_str = data.date.strftime("%Y")
+    return (f"({data.last_name}, {date_str})")
+
+
+if __name__ == "__main__":
+    sources = load_source("data_of_sources.txt")
+    for source in sources.source:
+        print(apa7_in_text(source))
+    with open("apa7_in_text.md", "w") as fout:
+        fout.write(apa7_in_text(source) + "\n")
+
+
+# bibliography entry for chicago manual of style 17th ediion author-date
+# the order of the variables for chicago
 # last_name, first_name. date. \"title.\" *journal* volume_number(issue_number)
 # : page_range. <doi>
 
@@ -125,6 +144,7 @@ def chicago_author_date_source(data: Source):
             f"{data.volume_number}({data.issue_number}): " +
             f"{data.page_range}. " +
             f"<{data.doi}>")
+    # the correct formatting of a chicago author date citation
 
 
 if __name__ == "__main__":
@@ -134,10 +154,27 @@ if __name__ == "__main__":
     with open("chicago_bib.md", "w") as fout:
         fout.write("Bibliography \n")
     for source in sources.source:
-        with open("chicago_bib.md", "a") as fout:  # a is for append
+        with open("chicago_bib.md", "a") as fout:
             fout.write(chicago_author_date_source(source) + "\n")
 
 
+# in-text citation for chicago manual of style 17th ediion author-date
+
+def chicago_in_text(data: Source) -> str:
+    date_str = data.date.strftime("%Y")
+    return (f"({data.last_name} {date_str})")
+
+
+if __name__ == "__main__":
+    sources = load_source("data_of_sources.txt")
+    for source in sources.source:
+        print(chicago_in_text(source))
+    with open("chicago_in_text.md", "w") as fout:
+        fout.write(chicago_in_text(source) + "\n")
+
+
+# bibliography entry for mla 9
+# the order of the variables for mla9
 # last_name, first_name. \"title.\" *journal*, vol. volume_number, no.
 # issue_number, date, pp. page_range, <doi>. Accessed date_viewed.
 
@@ -145,22 +182,29 @@ if __name__ == "__main__":
 def mla9_source(data: Source):
     date_str = data.date.strftime("%Y")
     date_str_viewed = data.date_viewed.strftime("%d %b %Y")
+    # for date date_viewed/when the source was last accessed it requires date
+    # and month as well if possible, and the month written out and abbreviated
+    # if it's longer, and in day month year order
 
     abbreviated_month = {
         "Jan": "Jan.", "Feb": "Feb.", "Mar": "Mar.", "Apr": "Apr.",
-        "May": "May",  "Jun": "Jun.", "Jul": "Jul.", "Aug": "Aug.",
+        "May": "May",  "Jun": "June", "Jul": "July", "Aug": "Aug.",
         "Sep": "Sep.", "Oct": "Oct.", "Nov": "Nov.", "Dec": "Dec."}
+    # changing the written out month into the correct forms
 
     day = str(data.date_viewed.day)
     month = data.date_viewed.strftime("%b")
     year = data.date_viewed.strftime("%Y")
     date_str_viewed = f"{day} {abbreviated_month[month]} {year}"
+    # formatting the correct form of the date and it also removes 0s if the day
+    # or month starts with it
 
     return (f"{data.last_name}, {data.first_name}. \"{data.title}.\" " +
             f"*{data.journal}*, vol. {data.volume_number}, " +
             f"no. {data.issue_number}, {date_str}, " +
             f"pp. {data.page_range}, <{data.doi}>. " +
             f"Accessed {date_str_viewed}.")
+    # the correct formatting of an mla 9th edition citation
 
 
 if __name__ == "__main__":
@@ -172,3 +216,17 @@ if __name__ == "__main__":
     for source in sources.source:
         with open("mla_bib.md", "a") as fout:
             fout.write(mla9_source(source) + "\n")
+
+
+# in-text citation for mla 9
+
+def mla9_in_text(data: Source) -> str:
+    return (f"({data.last_name})")
+
+
+if __name__ == "__main__":
+    sources = load_source("data_of_sources.txt")
+    for source in sources.source:
+        print(mla9_in_text(source))
+    with open("mla9_in_text.md", "w") as fout:
+        fout.write(mla9_in_text(source) + "\n")
