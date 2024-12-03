@@ -1,9 +1,9 @@
 source:
 - first_name: Jorge
   last_name: Tigno
-  title: Migration and Violent Conflict in Mindanao
-  date: "2006"
-  journal:  Sociological Demography Press
+  title: "Migration and Violent Conflict in Mindanao"
+  date: 2006-01-01
+  journal: Sociological Demography Press
   page_range: 23-47
   doi: https://muse.jhu.edu/article/204749
   volume_number: 45
@@ -12,10 +12,32 @@ source:
 - first_name: Lee
   last_name: Seymour
   title: "Why Factions Switch Sides in Civil Wars: Rivalry, Patronage, and Realignment in Sudan"
-  date: "2014"
+  date: 2014-01-01
   journal:  International Security
   page_range: 92-131
   doi: https://muse.jhu.edu/article/204749
   volume_number: 39
   issue_number: 2
   date_viewed: 2023-12-06
+- first_name: Ivan
+  last_name: Molloy
+  title: "Revolution in the Philippines: The Question of an Alliance between Islam and Communism"
+  date: 1985-08-01
+  journal: University of California Press
+  page_range: 822-833
+  doi: https://www.jstor.org/stable/2644112
+  volume_number: 25
+  issue_number: 8
+  date_viewed: 2024-10-10
+- first_name: "Rizal G"
+  last_name: Buendia
+  title: "The Mindanao Conflict in the Philippines:  Ethno-Religious War or Economic  Conflict? "
+  date: 2006-01-01
+  journal: "The Politics of Death: Political Violence in South East Asia"
+  page_range: 147-187
+  doi: na
+  volume_number: 0
+  issue_number: 0
+  date_viewed: 2024-12-01
+
+
